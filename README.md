@@ -99,61 +99,51 @@ Get up and running in minutes with this simple example:
 
 ```javascript
 const { 
-    default: makeWASocket, 
-    DisconnectReason, 
-    useMultiFileAuthState 
+    fetchLatestBaileysVersion,
+    useMultiFileAuthState,
+    default: makeWASocket
 } = require('@shadow999/baileys')
 
-async function connectToWhatsApp() {
-    // Load authentication credentials
-    const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
-    
-    // Create WhatsApp socket connection
-    const sock = makeWASocket({
-        auth: state,
-        printQRInTerminal: true
-    })
-    
-    // Save credentials whenever they update
-    sock.ev.on('creds.update', saveCreds)
-    
-    // Handle connection status updates
-    sock.ev.on('connection.update', (update) => {
-        const { connection, lastDisconnect } = update
+async function connectSession(sessionName, sessionPath, manager) {
+    try {
+        // Load Baileys version
+        const { version } = await fetchLatestBaileysVersion()
         
-        if(connection === 'close') {
-            const shouldReconnect = 
-                lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut
-            
-            console.log('Connection closed:', lastDisconnect.error)
-            console.log('Reconnecting:', shouldReconnect)
-            
-            // Automatically reconnect if not logged out
-            if(shouldReconnect) {
-                connectToWhatsApp()
-            }
-        } else if(connection === 'open') {
-            console.log('✅ Connected successfully!')
-        }
-    })
-    
-    // Handle incoming messages
-    sock.ev.on('messages.upsert', async m => {
-        const msg = m.messages[0]
+        // Load authentication state
+        const { state, saveCreds } = await useMultiFileAuthState(sessionPath)
         
-        if (!msg.key.fromMe && m.type === 'notify') {
-            console.log('📨 New message received:', JSON.stringify(msg, null, 2))
-            
-            // Send an automatic reply
-            await sock.sendMessage(msg.key.remoteJid, { 
-                text: '👋 Hello! Thanks for your message. This is SHADOW-N PRO!' 
-            })
-        }
-    })
+        // Create WhatsApp connection
+        const conn = makeWASocket({
+            logger: manager.P({ level: 'silent' }),
+            printQRInTerminal: false,
+            auth: state,
+            syncFullHistory: true,
+            msgRetryCounterCache: manager.msgRetryCounterCache,
+            getMessage: async (key) => undefined
+        })
+        
+        // Store connection
+        manager.activeConnections.set(sessionName, {
+            conn,
+            sessionName,
+            sessionPath,
+            connected: false,
+            startTime: Date.now(),
+            lastSeen: Date.now()
+        })
+        
+        // Reset reconnect tracking
+        manager.reconnectAttempts.set(sessionName, 0)
+        manager.reconnectDelay.set(sessionName, 5_000)
+        
+        // Setup event handlers
+        manager.setupEventHandlers(sessionName, conn, saveCreds)
+        
+        console.log(`✅ Session "${sessionName}" connected successfully!`)
+    } catch (error) {
+        console.error(`❌ Error connecting to ${sessionName}:`, error.message)
+    }
 }
-
-// Start the connection
-connectToWhatsApp()
 ```
 
 ---
