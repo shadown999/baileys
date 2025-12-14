@@ -13,6 +13,10 @@ A modified and enhanced version of Baileys - the lightweight, WebSocket-based Ty
 
 ---
 
+<div align="center">
+  <img src="https://files.catbox.moe/ehoncd.jpg" alt="Banner" width="600"/>
+</div>
+
 ## 📑 Table of Contents
 
 - [✨ Features](#-features)
