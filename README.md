@@ -7,10 +7,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![WhatsApp](https://img.shields.io/badge/WhatsApp-Multi--Device-25D366?style=flat-square&logo=whatsapp)](https://www.whatsapp.com)
 
-- ✅**Group working
-- ✅**Bad Mac error fixed
-- ✅**All functions are nominal
-  
 A modified and enhanced version of Baileys - the lightweight, WebSocket-based TypeScript/JavaScript library for interacting with WhatsApp Web API.
 
 **✨ Built with ❤️ by Nethupa Methwan**
@@ -101,27 +97,27 @@ const {
 async function connectToWhatsApp() {
     // Load authentication credentials
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
-
+    
     // Create WhatsApp socket connection
     const sock = makeWASocket({
         auth: state,
         printQRInTerminal: true
     })
-
+    
     // Save credentials whenever they update
     sock.ev.on('creds.update', saveCreds)
-
+    
     // Handle connection status updates
     sock.ev.on('connection.update', (update) => {
         const { connection, lastDisconnect } = update
-
+        
         if(connection === 'close') {
             const shouldReconnect = 
                 lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut
-
+            
             console.log('Connection closed:', lastDisconnect.error)
             console.log('Reconnecting:', shouldReconnect)
-
+            
             // Automatically reconnect if not logged out
             if(shouldReconnect) {
                 connectToWhatsApp()
@@ -130,14 +126,14 @@ async function connectToWhatsApp() {
             console.log('✅ Connected successfully!')
         }
     })
-
+    
     // Handle incoming messages
     sock.ev.on('messages.upsert', async m => {
         const msg = m.messages[0]
-
+        
         if (!msg.key.fromMe && m.type === 'notify') {
             console.log('📨 New message received:', JSON.stringify(msg, null, 2))
-
+            
             // Send an automatic reply
             await sock.sendMessage(msg.key.remoteJid, { 
                 text: '👋 Hello! Thanks for your message. This is SHADOW-N PRO!' 
@@ -426,7 +422,7 @@ Contributions are always welcome! We appreciate your help in making SHADOW-N PRO
 
 1. **Fork the Repository**
    ```bash
-   git clone https://github.com/yourusername/shadow-baileys.git
+   git clone https://github.com/shadown999/baileys.git
    ```
 
 2. **Create a Feature Branch**
@@ -507,10 +503,9 @@ Your support helps keep this project alive and growing!
 
 **Developer:** Nethupa Methwan
 
-- 💼 GitHub: [@yourusername](https://github.com/yourusername)
-- 📧 Email: your.email@example.com
-- 🐦 Twitter: [@yourusername](https://twitter.com/yourusername)
-- 💬 Telegram: @yourusername
+- 💼 GitHub: [@shadown999](https://github.com/shadown999)
+- 📧 Email: methwan2000@gmail.com
+- 💬 Telegram: https://t.me/shadown999
 
 For bug reports and feature requests, please use the GitHub Issues page.
 
@@ -547,6 +542,6 @@ Special thanks to:
 
 ### Show your support by giving a ⭐ if this project helped you!
 
-[![Star on GitHub](https://img.shields.io/github/stars/yourusername/shadow-baileys?style=social)](https://github.com/yourusername/shadow-baileys)
+[![Star on GitHub](https://img.shields.io/github/stars/shadown999/baileys?style=social)](https://github.com/yourusername/shadow-baileys)
 
-</div># baileys
+</div>
