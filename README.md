@@ -7,6 +7,12 @@
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![WhatsApp](https://img.shields.io/badge/WhatsApp-Multi--Device-25D366?style=flat-square&logo=whatsapp)](https://www.whatsapp.com)
 
+- ✅**Group working and no any errors
+- ✅**Bad Mac error fixed
+- ✅**Channel working
+- ✅**Interactive buttons
+- ✅**All functions working and nominal
+
 A modified and enhanced version of Baileys - the lightweight, WebSocket-based TypeScript/JavaScript library for interacting with WhatsApp Web API.
 
 **✨ Built with ❤️ by Nethupa Methwan**
