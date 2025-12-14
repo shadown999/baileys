@@ -521,16 +521,6 @@ Special thanks to:
 
 ---
 
-## 📊 Project Stats
-
-```
-⭐ Stars: [Your Stars]
-🍴 Forks: [Your Forks]
-🐛 Issues: [Open Issues]
-📦 Downloads: [NPM Downloads]
-```
-
----
 
 <div align="center">
 
